@@ -6,6 +6,7 @@ from .order_management_exception import OrderManagementException
 from datetime import datetime
 from .attribute_phone_number import PhoneNumber
 from .attribute_address import Address
+from .attribute_order_type import OrderType
 
 
 class OrderRequest:
@@ -15,7 +16,7 @@ class OrderRequest:
                   delivery_address, phone_number, zip_code ):
         self.__product_id = product_id
         self.__delivery_address = Address(delivery_address).value
-        self.__order_type = self.validate_order_type(order_type)
+        self.__order_type = OrderType(order_type).value
         self.__phone_number = PhoneNumber(phone_number).value
         self.__zip_code = self.validate_zip_code(zip_code)
         justnow = datetime.utcnow()
@@ -83,9 +84,3 @@ class OrderRequest:
         return zip_code
 
 
-    def validate_order_type(self, order_type:str)->str:
-        myregex = re.compile(r"(Regular|Premium)")
-        result = myregex.fullmatch(order_type)
-        if not result:
-            raise OrderManagementException("order_type is not valid")
-        return(order_type)
