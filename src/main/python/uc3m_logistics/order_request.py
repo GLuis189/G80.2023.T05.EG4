@@ -5,6 +5,7 @@ import re
 from .order_management_exception import OrderManagementException
 from datetime import datetime
 from .attribute_phone_number import PhoneNumber
+from .attribute_address import Address
 
 
 class OrderRequest:
@@ -13,7 +14,7 @@ class OrderRequest:
     def __init__( self, product_id, order_type,
                   delivery_address, phone_number, zip_code ):
         self.__product_id = product_id
-        self.__delivery_address = self.validate_address(delivery_address)
+        self.__delivery_address = Address(delivery_address).value
         self.__order_type = self.validate_order_type(order_type)
         self.__phone_number = PhoneNumber(phone_number).value
         self.__zip_code = self.validate_zip_code(zip_code)
@@ -81,12 +82,6 @@ class OrderRequest:
             raise OrderManagementException("zip_code format is not valid")
         return zip_code
 
-    def validate_address(self, address:str)->str:
-        myregex = re.compile(r"^(?=^.{20,100}$)(([a-zA-Z0-9]+\s)+[a-zA-Z0-9]+)$")
-        result = myregex.fullmatch(address)
-        if not result:
-            raise OrderManagementException("address is not valid")
-        return address
 
     def validate_order_type(self, order_type:str)->str:
         myregex = re.compile(r"(Regular|Premium)")
