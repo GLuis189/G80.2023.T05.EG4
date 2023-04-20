@@ -123,8 +123,6 @@ class OrderManager:
                         zip_code:str)->str:
         """Register the orders into the order's file"""
 
-        self.validate_order_type(order_type)
-
         if self.validate_ean13(product_id):
             my_order = OrderRequest(product_id,
                                     order_type,
@@ -136,13 +134,6 @@ class OrderManager:
 
         return my_order.order_id
 
-
-
-    def validate_order_type(self, order_type:str)->None:
-        myregex = re.compile(r"(Regular|Premium)")
-        result = myregex.fullmatch(order_type)
-        if not result:
-            raise OrderManagementException("order_type is not valid")
 
     #pylint: disable=too-many-locals
     def send_product (self, input_file:str )->str:
