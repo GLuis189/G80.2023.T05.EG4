@@ -126,7 +126,6 @@ class OrderManager:
         self.validate_order_type(order_type)
         self.validate_address(address)
         self.validate_phone_number(phone_number)
-        self.validate_zip_code(zip_code)
 
         if self.validate_ean13(product_id):
             my_order = OrderRequest(product_id,
@@ -138,13 +137,6 @@ class OrderManager:
         self.save_store(my_order)
 
         return my_order.order_id
-
-    def validate_zip_code(self, zip_code:str)->None:
-        if zip_code.isnumeric() and len(zip_code) == 5:
-            if (int(zip_code) > 52999 or int(zip_code) < 1000):
-                raise OrderManagementException("zip_code is not valid")
-        else:
-            raise OrderManagementException("zip_code format is not valid")
 
     def validate_phone_number(self, phone_number:str)->None:
         myregex = re.compile(r"^(\+)[0-9]{11}")

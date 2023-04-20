@@ -1,7 +1,10 @@
 """MODULE: order_request. Contains the order request class"""
 import hashlib
 import json
+import re
+from .order_management_exception import OrderManagementException
 from datetime import datetime
+
 
 class OrderRequest:
     """Class representing the register of the order in the system"""
@@ -12,7 +15,7 @@ class OrderRequest:
         self.__delivery_address = delivery_address
         self.__order_type = order_type
         self.__phone_number = phone_number
-        self.__zip_code = zip_code
+        self.__zip_code = self.validate_zip_code(zip_code)
         justnow = datetime.utcnow()
         self.__time_stamp = datetime.timestamp(justnow)
         self.__order_id =  hashlib.md5(self.__str__().encode()).hexdigest()
@@ -68,3 +71,11 @@ class OrderRequest:
     def zip_code( self ):
         """Returns the order's zip_code"""
         return self.__zip_code
+
+    def validate_zip_code(self, zip_code:str)->str:
+        if zip_code.isnumeric() and len(zip_code) == 5:
+            if (int(zip_code) > 52999 or int(zip_code) < 1000):
+                raise OrderManagementException("zip_code is not valid")
+        else:
+            raise OrderManagementException("zip_code format is not valid")
+        return zip_code
