@@ -125,7 +125,6 @@ class OrderManager:
 
         self.validate_order_type(order_type)
         self.validate_address(address)
-        self.validate_phone_number(phone_number)
 
         if self.validate_ean13(product_id):
             my_order = OrderRequest(product_id,
@@ -138,11 +137,7 @@ class OrderManager:
 
         return my_order.order_id
 
-    def validate_phone_number(self, phone_number:str)->None:
-        myregex = re.compile(r"^(\+)[0-9]{11}")
-        result = myregex.fullmatch(phone_number)
-        if not result:
-            raise OrderManagementException("phone number is not valid")
+
 
     def validate_address(self, address:str)->None:
         myregex = re.compile(r"^(?=^.{20,100}$)(([a-zA-Z0-9]+\s)+[a-zA-Z0-9]+)$")

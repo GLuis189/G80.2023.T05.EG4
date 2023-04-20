@@ -14,7 +14,7 @@ class OrderRequest:
         self.__product_id = product_id
         self.__delivery_address = delivery_address
         self.__order_type = order_type
-        self.__phone_number = phone_number
+        self.__phone_number = self.validate_phone_number(phone_number)
         self.__zip_code = self.validate_zip_code(zip_code)
         justnow = datetime.utcnow()
         self.__time_stamp = datetime.timestamp(justnow)
@@ -79,3 +79,10 @@ class OrderRequest:
         else:
             raise OrderManagementException("zip_code format is not valid")
         return zip_code
+
+    def validate_phone_number(self, phone_number:str)->str:
+        myregex = re.compile(r"^(\+)[0-9]{11}")
+        result = myregex.fullmatch(phone_number)
+        if not result:
+            raise OrderManagementException("phone number is not valid")
+        return phone_number
