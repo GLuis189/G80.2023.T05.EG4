@@ -124,18 +124,18 @@ class OrderManager:
         """Register the orders into the order's file"""
 
         myregex = re.compile(r"(Regular|Premium)")
-        res = myregex.fullmatch(order_type)
-        if not res:
+        result = myregex.fullmatch(order_type)
+        if not result:
             raise OrderManagementException ("order_type is not valid")
 
         myregex = re.compile(r"^(?=^.{20,100}$)(([a-zA-Z0-9]+\s)+[a-zA-Z0-9]+)$")
-        res = myregex.fullmatch(address)
-        if not res:
+        result = myregex.fullmatch(address)
+        if not result:
             raise OrderManagementException ("address is not valid")
 
         myregex = re.compile(r"^(\+)[0-9]{11}")
-        res = myregex.fullmatch(phone_number)
-        if not res:
+        result = myregex.fullmatch(phone_number)
+        if not result:
             raise OrderManagementException ("phone number is not valid")
         if zip_code.isnumeric() and len(zip_code) == 5:
             if (int(zip_code) > 52999 or int(zip_code) < 1000):
