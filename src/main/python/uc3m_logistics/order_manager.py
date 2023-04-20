@@ -21,7 +21,7 @@ class OrderManager:
         # RETURN TRUE IF THE EAN13 IS RIGHT, OR FALSE IN OTHER CASE
         checksum = 0
         code_read = -1
-        res = False
+        result = False
         regex_ean13 = re.compile("^[0-9]{13}$")
         valid_ean13_format = regex_ean13.fullmatch(ean13)
         if valid_ean13_format is None:
@@ -39,10 +39,10 @@ class OrderManager:
         control_digit = (10 - (checksum % 10)) % 10
 
         if (code_read != -1) and (code_read == control_digit):
-            res = True
+            result = True
         else:
             raise OrderManagementException("Invalid EAN13 control digit")
-        return res
+        return result
 
     @staticmethod
     def validate_tracking_code(tracking_code: str)->None:
