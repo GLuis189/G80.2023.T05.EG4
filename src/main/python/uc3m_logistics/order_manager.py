@@ -45,11 +45,11 @@ class OrderManager:
         return res
 
     @staticmethod
-    def validate_tracking_code( t_c ):
+    def validate_tracking_code(tracking_code):
         """Method for validating sha256 values"""
         myregex = re.compile(r"[0-9a-fA-F]{64}$")
-        res = myregex.fullmatch(t_c)
-        if not res:
+        result = myregex.fullmatch(tracking_code)
+        if not result:
             raise OrderManagementException("tracking_code format is not valid")
 
     @staticmethod
