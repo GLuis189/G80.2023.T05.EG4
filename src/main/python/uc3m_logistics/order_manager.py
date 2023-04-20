@@ -45,7 +45,7 @@ class OrderManager:
         return res
 
     @staticmethod
-    def validate_tracking_code(tracking_code):
+    def validate_tracking_code(tracking_code: str)->None:
         """Method for validating sha256 values"""
         myregex = re.compile(r"[0-9a-fA-F]{64}$")
         result = myregex.fullmatch(tracking_code)
@@ -53,7 +53,7 @@ class OrderManager:
             raise OrderManagementException("tracking_code format is not valid")
 
     @staticmethod
-    def save_store( data ):
+    def save_store(data: OrderRequest)->True:
         """Medthod for saving the orders store"""
         file_store = JSON_FILES_PATH + "orders_store.json"
         #first read the file
@@ -82,7 +82,7 @@ class OrderManager:
         return True
 
     @staticmethod
-    def save_fast(data):
+    def save_fast(data: dict)->None:
         """Method for saving the orders store"""
         orders_store = JSON_FILES_PATH + "orders_store.json"
         with open(orders_store, "r+", encoding="utf-8", newline="") as file:
@@ -92,7 +92,7 @@ class OrderManager:
             json.dump(data_list, file, indent=2)
 
     @staticmethod
-    def save_orders_shipped( shipment ):
+    def save_orders_shipped(shipment: dict)->None:
         """Saves the shipping object into a file"""
         shimpents_store_file = JSON_FILES_PATH + "shipments_store.json"
         # first read the file
@@ -116,11 +116,11 @@ class OrderManager:
 
 
     #pylint: disable=too-many-arguments
-    def register_order( self, product_id,
-                        order_type,
-                        address,
-                        phone_number,
-                        zip_code ):
+    def register_order(self, product_id:str,
+                        order_type:str,
+                        address:str,
+                        phone_number:str,
+                        zip_code:str)->str:
         """Register the orders into the order's file"""
 
         myregex = re.compile(r"(Regular|Premium)")
@@ -154,7 +154,7 @@ class OrderManager:
         return my_order.order_id
 
     #pylint: disable=too-many-locals
-    def send_product ( self, input_file ):
+    def send_product (self, input_file:str )->str:
         """Sends the order included in the input_file"""
         try:
             with open(input_file, "r", encoding="utf-8", newline="") as file:
@@ -222,7 +222,7 @@ class OrderManager:
 
         return my_sign.tracking_code
 
-    def deliver_product( self, tracking_code ):
+    def deliver_product(self, tracking_code:str)->True:
         """Register the delivery of the product"""
         self.validate_tracking_code(tracking_code)
 
