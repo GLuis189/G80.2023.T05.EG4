@@ -178,19 +178,12 @@ class OrderManager:
 
         #check all the information
         try:
-            myregex = re.compile(r"[0-9a-fA-F]{32}$")
-            result = myregex.fullmatch(data["OrderID"])
-            if not result:
-                raise OrderManagementException("order id is not valid")
+            self.validate_order_id(data)
         except KeyError as exception:
             raise  OrderManagementException("Bad label") from exception
 
         try:
-            regex_email = r'^[a-z0-9]+([\._]?[a-z0-9]+)+[@](\w+[.])+\w{2,3}$'
-            myregex = re.compile(regex_email)
-            result = myregex.fullmatch(data["ContactEmail"])
-            if not result:
-                raise OrderManagementException("contact email is not valid")
+            self.validate_email(data)
         except KeyError as exception:
             raise OrderManagementException("Bad label") from exception
         file_store = JSON_FILES_PATH + "orders_store.json"
@@ -232,6 +225,19 @@ class OrderManager:
         self.save_orders_shipped(my_sign)
 
         return my_sign.tracking_code
+
+    def validate_email(self, data:str):
+        regex_email = r'^[a-z0-9]+([\._]?[a-z0-9]+)+[@](\w+[.])+\w{2,3}$'
+        myregex = re.compile(regex_email)
+        result = myregex.fullmatch(data["ContactEmail"])
+        if not result:
+            raise OrderManagementException("contact email is not valid")
+
+    def validate_order_id(self, data:str)->None:
+        myregex = re.compile(r"[0-9a-fA-F]{32}$")
+        result = myregex.fullmatch(data["OrderID"])
+        if not result:
+            raise OrderManagementException("order id is not valid")
 
     def deliver_product(self, tracking_code:str)->True:
         """Register the delivery of the product"""
