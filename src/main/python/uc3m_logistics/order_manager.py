@@ -123,25 +123,11 @@ class OrderManager:
                         zip_code:str)->str:
         """Register the orders into the order's file"""
 
-        myregex = re.compile(r"(Regular|Premium)")
-        result = myregex.fullmatch(order_type)
-        if not result:
-            raise OrderManagementException ("order_type is not valid")
+        self.validate_order_type(order_type)
+        self.validate_address(address)
+        self.validate_phone_number(phone_number)
+        self.validate_zip_code(zip_code)
 
-        myregex = re.compile(r"^(?=^.{20,100}$)(([a-zA-Z0-9]+\s)+[a-zA-Z0-9]+)$")
-        result = myregex.fullmatch(address)
-        if not result:
-            raise OrderManagementException ("address is not valid")
-
-        myregex = re.compile(r"^(\+)[0-9]{11}")
-        result = myregex.fullmatch(phone_number)
-        if not result:
-            raise OrderManagementException ("phone number is not valid")
-        if zip_code.isnumeric() and len(zip_code) == 5:
-            if (int(zip_code) > 52999 or int(zip_code) < 1000):
-                raise OrderManagementException("zip_code is not valid")
-        else:
-            raise OrderManagementException("zip_code format is not valid")
         if self.validate_ean13(product_id):
             my_order = OrderRequest(product_id,
                                     order_type,
@@ -152,6 +138,31 @@ class OrderManager:
         self.save_store(my_order)
 
         return my_order.order_id
+
+    def validate_zip_code(self, zip_code:str)->None:
+        if zip_code.isnumeric() and len(zip_code) == 5:
+            if (int(zip_code) > 52999 or int(zip_code) < 1000):
+                raise OrderManagementException("zip_code is not valid")
+        else:
+            raise OrderManagementException("zip_code format is not valid")
+
+    def validate_phone_number(self, phone_number:str)->None:
+        myregex = re.compile(r"^(\+)[0-9]{11}")
+        result = myregex.fullmatch(phone_number)
+        if not result:
+            raise OrderManagementException("phone number is not valid")
+
+    def validate_address(self, address:str)->None:
+        myregex = re.compile(r"^(?=^.{20,100}$)(([a-zA-Z0-9]+\s)+[a-zA-Z0-9]+)$")
+        result = myregex.fullmatch(address)
+        if not result:
+            raise OrderManagementException("address is not valid")
+
+    def validate_order_type(self, order_type:str)->None:
+        myregex = re.compile(r"(Regular|Premium)")
+        result = myregex.fullmatch(order_type)
+        if not result:
+            raise OrderManagementException("order_type is not valid")
 
     #pylint: disable=too-many-locals
     def send_product (self, input_file:str )->str:
