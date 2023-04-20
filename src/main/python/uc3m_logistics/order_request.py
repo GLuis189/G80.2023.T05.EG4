@@ -12,7 +12,7 @@ class OrderRequest:
     def __init__( self, product_id, order_type,
                   delivery_address, phone_number, zip_code ):
         self.__product_id = product_id
-        self.__delivery_address = delivery_address
+        self.__delivery_address = self.validate_address(delivery_address)
         self.__order_type = order_type
         self.__phone_number = self.validate_phone_number(phone_number)
         self.__zip_code = self.validate_zip_code(zip_code)
@@ -87,8 +87,9 @@ class OrderRequest:
             raise OrderManagementException("phone number is not valid")
         return phone_number
 
-    def validate_address(self, address:str)->None:
+    def validate_address(self, address:str)->str:
         myregex = re.compile(r"^(?=^.{20,100}$)(([a-zA-Z0-9]+\s)+[a-zA-Z0-9]+)$")
         result = myregex.fullmatch(address)
         if not result:
             raise OrderManagementException("address is not valid")
+        return address

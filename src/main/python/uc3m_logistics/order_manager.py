@@ -124,7 +124,6 @@ class OrderManager:
         """Register the orders into the order's file"""
 
         self.validate_order_type(order_type)
-        self.validate_address(address)
 
         if self.validate_ean13(product_id):
             my_order = OrderRequest(product_id,
@@ -138,12 +137,6 @@ class OrderManager:
         return my_order.order_id
 
 
-
-    def validate_address(self, address:str)->None:
-        myregex = re.compile(r"^(?=^.{20,100}$)(([a-zA-Z0-9]+\s)+[a-zA-Z0-9]+)$")
-        result = myregex.fullmatch(address)
-        if not result:
-            raise OrderManagementException("address is not valid")
 
     def validate_order_type(self, order_type:str)->None:
         myregex = re.compile(r"(Regular|Premium)")
