@@ -159,29 +159,29 @@ class OrderManager:
         try:
             with open(input_file, "r", encoding="utf-8", newline="") as file:
                 data = json.load(file)
-        except FileNotFoundError as ex:
+        except FileNotFoundError as exception:
             # file is not found
-            raise OrderManagementException("File is not found") from ex
-        except json.JSONDecodeError as ex:
-            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
+            raise OrderManagementException("File is not found") from exception
+        except json.JSONDecodeError as exception:
+            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from exception
 
         #check all the information
         try:
             myregex = re.compile(r"[0-9a-fA-F]{32}$")
-            res = myregex.fullmatch(data["OrderID"])
-            if not res:
+            result = myregex.fullmatch(data["OrderID"])
+            if not result:
                 raise OrderManagementException("order id is not valid")
-        except KeyError as ex:
-            raise  OrderManagementException("Bad label") from ex
+        except KeyError as exception:
+            raise  OrderManagementException("Bad label") from exception
 
         try:
             regex_email = r'^[a-z0-9]+([\._]?[a-z0-9]+)+[@](\w+[.])+\w{2,3}$'
             myregex = re.compile(regex_email)
-            res = myregex.fullmatch(data["ContactEmail"])
-            if not res:
+            result = myregex.fullmatch(data["ContactEmail"])
+            if not result:
                 raise OrderManagementException("contact email is not valid")
-        except KeyError as ex:
-            raise OrderManagementException("Bad label") from ex
+        except KeyError as exception:
+            raise OrderManagementException("Bad label") from exception
         file_store = JSON_FILES_PATH + "orders_store.json"
 
         with open(file_store, "r", encoding="utf-8", newline="") as file:
@@ -191,17 +191,17 @@ class OrderManager:
             if item["_OrderRequest__order_id"] == data["OrderID"]:
                 found = True
                 #retrieve the orders data
-                proid = item["_OrderRequest__product_id"]
+                product_id = item["_OrderRequest__product_id"]
                 address = item["_OrderRequest__delivery_address"]
-                reg_type = item["_OrderRequest__order_type"]
+                register_type = item["_OrderRequest__order_type"]
                 phone = item["_OrderRequest__phone_number"]
                 order_timestamp = item["_OrderRequest__time_stamp"]
                 zip_code = item["_OrderRequest__zip_code"]
                 #set the time when the order was registered for checking the md5
                 with freeze_time(datetime.fromtimestamp(order_timestamp).date()):
-                    order = OrderRequest(product_id=proid,
+                    order = OrderRequest(product_id=product_id,
                                          delivery_address=address,
-                                         order_type=reg_type,
+                                         order_type=register_type,
                                          phone_number=phone,
                                          zip_code=zip_code)
 
@@ -211,9 +211,9 @@ class OrderManager:
         if not found:
             raise OrderManagementException("order_id not found")
 
-        my_sign= OrderShipping(product_id=proid,
+        my_sign= OrderShipping(product_id=product_id,
                                order_id=data["OrderID"],
-                               order_type=reg_type,
+                               order_type=register_type,
                                delivery_email=data["ContactEmail"])
 
         #save the OrderShipping in shipments_store.json
