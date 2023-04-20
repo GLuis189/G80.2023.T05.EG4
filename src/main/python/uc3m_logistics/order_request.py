@@ -86,3 +86,9 @@ class OrderRequest:
         if not result:
             raise OrderManagementException("phone number is not valid")
         return phone_number
+
+    def validate_address(self, address:str)->None:
+        myregex = re.compile(r"^(?=^.{20,100}$)(([a-zA-Z0-9]+\s)+[a-zA-Z0-9]+)$")
+        result = myregex.fullmatch(address)
+        if not result:
+            raise OrderManagementException("address is not valid")
