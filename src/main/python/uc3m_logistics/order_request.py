@@ -4,6 +4,7 @@ import json
 import re
 from .order_management_exception import OrderManagementException
 from datetime import datetime
+from .attribute_phone_number import PhoneNumber
 
 
 class OrderRequest:
@@ -14,7 +15,7 @@ class OrderRequest:
         self.__product_id = product_id
         self.__delivery_address = self.validate_address(delivery_address)
         self.__order_type = self.validate_order_type(order_type)
-        self.__phone_number = self.validate_phone_number(phone_number)
+        self.__phone_number = PhoneNumber(phone_number).value
         self.__zip_code = self.validate_zip_code(zip_code)
         justnow = datetime.utcnow()
         self.__time_stamp = datetime.timestamp(justnow)
@@ -79,13 +80,6 @@ class OrderRequest:
         else:
             raise OrderManagementException("zip_code format is not valid")
         return zip_code
-
-    def validate_phone_number(self, phone_number:str)->str:
-        myregex = re.compile(r"^(\+)[0-9]{11}")
-        result = myregex.fullmatch(phone_number)
-        if not result:
-            raise OrderManagementException("phone number is not valid")
-        return phone_number
 
     def validate_address(self, address:str)->str:
         myregex = re.compile(r"^(?=^.{20,100}$)(([a-zA-Z0-9]+\s)+[a-zA-Z0-9]+)$")

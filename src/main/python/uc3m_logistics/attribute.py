@@ -1,16 +1,15 @@
-""""""
+
 import re
 from .order_management_exception import OrderManagementException
 
 class Attribute():
-    """"""
     def __init__(self):
         self._attr_value= ""
         self._error_message = ""
         self._validation_pattern = r""
 
 
-    def validate(self, value:str)->str:
+    def _validate(self, value:str)->str:
         myregex = re.compile(self._validation_pattern)
         result = myregex.fullmatch(value)
         if not result:
