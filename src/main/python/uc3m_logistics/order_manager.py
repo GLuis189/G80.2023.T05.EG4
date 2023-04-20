@@ -15,7 +15,7 @@ class OrderManager:
         pass
 
     @staticmethod
-    def validate_ean13( ean13 ):
+    def validate_ean13( ean13:str )->bool:
         """method vor validating a ean13 code"""
         # PLEASE INCLUDE HERE THE CODE FOR VALIDATING THE EAN13
         # RETURN TRUE IF THE EAN13 IS RIGHT, OR FALSE IN OTHER CASE
