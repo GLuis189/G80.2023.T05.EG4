@@ -30,8 +30,8 @@ class OrderManager:
         for i, digit in enumerate(reversed(ean13)):
             try:
                 current_digit = int(digit)
-            except ValueError as v_e:
-                raise OrderManagementException("Invalid EAN13 code string") from v_e
+            except ValueError as value_error:
+                raise OrderManagementException("Invalid EAN13 code string") from value_error
             if i == 0:
                 code_read = current_digit
             else:
