@@ -7,6 +7,7 @@ from freezegun import freeze_time
 from .order_management_exception import OrderManagementException
 from .order_manager_config import JSON_FILES_PATH
 from .order_request import OrderRequest
+from .attribute_email import Email
 
 #pylint: disable=too-many-instance-attributes
 class OrderShipping():
@@ -16,7 +17,7 @@ class OrderShipping():
         self.__json_content = self.read_json_file(input_file)
         self.__mydelivery_email,self.__myorder_id = self.validate_labels(self.__json_content)
         self.__order_id = self.validate_order_id(self.__myorder_id)
-        self.__delivery_email = self.validate_email(self.__mydelivery_email)
+        self.__delivery_email = Email(self.__mydelivery_email).value
         self.__myproduct_id, self.__myorder_type = self.check_order_id(self.__json_content)
         self.__alg = "SHA-256"
         self.__type = "DS"
@@ -91,12 +92,6 @@ class OrderShipping():
             raise OrderManagementException("order id is not valid")
         return order_id
 
-    def validate_email(self, email:str)->str:
-        regex_email = r'^[a-z0-9]+([\._]?[a-z0-9]+)+[@](\w+[.])+\w{2,3}$'
-        myregex = re.compile(regex_email)
-        result = myregex.fullmatch(email)
-        if not result:
-            raise OrderManagementException("contact email is not valid")
 
     def read_json_file(self, input_file):
         try:

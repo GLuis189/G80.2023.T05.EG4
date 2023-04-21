@@ -35,3 +35,4 @@ class JsonStore():
         except FileNotFoundError as ex:
             raise OrderManagementException("Wrong file or file path") from ex
         return True
+

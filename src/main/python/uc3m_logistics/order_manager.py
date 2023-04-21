@@ -23,15 +23,6 @@ class OrderManager:
         if not result:
             raise OrderManagementException("tracking_code format is not valid")
 
-    @staticmethod
-    def save_fast(data: dict)->None:
-        """Method for saving the orders store"""
-        orders_store = JSON_FILES_PATH + "orders_store.json"
-        with open(orders_store, "r+", encoding="utf-8", newline="") as file:
-            data_list = json.load(file)
-            data_list.append(data.__dict__)
-            file.seek(0)
-            json.dump(data_list, file, indent=2)
 
     @staticmethod
     def save_orders_shipped(shipment: dict)->None:
