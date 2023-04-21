@@ -87,14 +87,8 @@ class OrderManager:
 
         #check if this tracking_code is in shipments_store
         data_list = self.read_shipping_store()
-        #search this tracking_code
-        found = False
-        for item in data_list:
-            if item["_OrderShipping__tracking_code"] == tracking_code:
-                found = True
-                del_timestamp = item["_OrderShipping__delivery_day"]
-        if not found:
-            raise OrderManagementException("tracking_code is not found")
+
+        del_timestamp = self.find_tracking_code(data_list, tracking_code)
 
         today= datetime.today().date()
         delivery_date= datetime.fromtimestamp(del_timestamp).date()
@@ -121,6 +115,17 @@ class OrderManager:
         except FileNotFoundError as ex:
             raise OrderManagementException("Wrong file or file path") from ex
         return True
+
+    def find_tracking_code(self, data_list, tracking_code):
+        # search this tracking_code
+        found = False
+        for item in data_list:
+            if item["_OrderShipping__tracking_code"] == tracking_code:
+                found = True
+                del_timestamp = item["_OrderShipping__delivery_day"]
+        if not found:
+            raise OrderManagementException("tracking_code is not found")
+        return del_timestamp
 
     def read_shipping_store(self):
         shimpents_store_file = JSON_FILES_PATH + "shipments_store.json"
