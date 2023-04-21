@@ -90,10 +90,7 @@ class OrderManager:
 
         del_timestamp = self.find_tracking_code(data_list, tracking_code)
 
-        today= datetime.today().date()
-        delivery_date= datetime.fromtimestamp(del_timestamp).date()
-        if delivery_date != today:
-            raise OrderManagementException("Today is not the delivery date")
+        self.check_date(del_timestamp)
 
         shipments_file = JSON_FILES_PATH + "shipments_delivered.json"
 
@@ -115,6 +112,12 @@ class OrderManager:
         except FileNotFoundError as ex:
             raise OrderManagementException("Wrong file or file path") from ex
         return True
+
+    def check_date(self, del_timestamp):
+        today = datetime.today().date()
+        delivery_date = datetime.fromtimestamp(del_timestamp).date()
+        if delivery_date != today:
+            raise OrderManagementException("Today is not the delivery date")
 
     def find_tracking_code(self, data_list, tracking_code):
         # search this tracking_code
