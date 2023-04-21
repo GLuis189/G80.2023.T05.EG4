@@ -15,36 +15,6 @@ class OrderManager:
         pass
 
     @staticmethod
-    def validate_ean13( ean13:str )->bool:
-        """method vor validating a ean13 code"""
-        # PLEASE INCLUDE HERE THE CODE FOR VALIDATING THE EAN13
-        # RETURN TRUE IF THE EAN13 IS RIGHT, OR FALSE IN OTHER CASE
-        checksum = 0
-        code_read = -1
-        result = False
-        regex_ean13 = re.compile("^[0-9]{13}$")
-        valid_ean13_format = regex_ean13.fullmatch(ean13)
-        if valid_ean13_format is None:
-            raise OrderManagementException("Invalid EAN13 code string")
-
-        for i, digit in enumerate(reversed(ean13)):
-            try:
-                current_digit = int(digit)
-            except ValueError as value_error:
-                raise OrderManagementException("Invalid EAN13 code string") from value_error
-            if i == 0:
-                code_read = current_digit
-            else:
-                checksum += (current_digit) * 3 if (i % 2 != 0) else current_digit
-        control_digit = (10 - (checksum % 10)) % 10
-
-        if (code_read != -1) and (code_read == control_digit):
-            result = True
-        else:
-            raise OrderManagementException("Invalid EAN13 control digit")
-        return result
-
-    @staticmethod
     def validate_tracking_code(tracking_code: str)->None:
         """Method for validating sha256 values"""
         myregex = re.compile(r"[0-9a-fA-F]{64}$")
@@ -123,12 +93,12 @@ class OrderManager:
                         zip_code:str)->str:
         """Register the orders into the order's file"""
 
-        if self.validate_ean13(product_id):
-            my_order = OrderRequest(product_id,
-                                    order_type,
-                                    address,
-                                    phone_number,
-                                    zip_code)
+
+        my_order = OrderRequest(product_id,
+                                order_type,
+                                address,
+                                phone_number,
+                                zip_code)
 
         self.save_store(my_order)
 
