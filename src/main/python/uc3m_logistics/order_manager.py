@@ -92,8 +92,11 @@ class OrderManager:
 
         self.check_date(del_timestamp)
 
-        shipments_file = JSON_FILES_PATH + "shipments_delivered.json"
+        self.save_delivere_store(tracking_code)
+        return True
 
+    def save_delivere_store(self, tracking_code):
+        shipments_file = JSON_FILES_PATH + "shipments_delivered.json"
         try:
             with open(shipments_file, "r", encoding="utf-8", newline="") as file:
                 data_list = json.load(file)
@@ -111,7 +114,6 @@ class OrderManager:
                 json.dump(data_list, file, indent=2)
         except FileNotFoundError as ex:
             raise OrderManagementException("Wrong file or file path") from ex
-        return True
 
     def check_date(self, del_timestamp):
         today = datetime.today().date()
