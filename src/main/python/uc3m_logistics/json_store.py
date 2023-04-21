@@ -14,10 +14,7 @@ class JsonStore():
         # first read the file
         data_list = self.load_store(file_store)
 
-        found = False
-        for item in data_list:
-            if item["_OrderRequest__order_id"] == data.order_id:
-                found = True
+        found = self.find_data(data, data_list)
         if found is False:
             data_list.append(data.__dict__)
         else:
@@ -29,6 +26,12 @@ class JsonStore():
             raise OrderManagementException("Wrong file or file path") from ex
         return True
 
+    def find_data(self, data, data_list):
+        found = False
+        for item in data_list:
+            if item["_OrderRequest__order_id"] == data.order_id:
+                found = True
+        return found
 
     def load_store(self, file_store):
         try:
