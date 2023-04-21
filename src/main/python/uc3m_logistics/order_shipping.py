@@ -8,6 +8,7 @@ from .order_management_exception import OrderManagementException
 from .order_manager_config import JSON_FILES_PATH
 from .order_request import OrderRequest
 from .attribute_email import Email
+from .attribute_order_id import OrderId
 
 #pylint: disable=too-many-instance-attributes
 class OrderShipping():
@@ -16,7 +17,7 @@ class OrderShipping():
     def __init__(self, input_file):
         self.__json_content = self.read_json_file(input_file)
         self.__mydelivery_email,self.__myorder_id = self.validate_labels(self.__json_content)
-        self.__order_id = self.validate_order_id(self.__myorder_id)
+        self.__order_id = OrderId(self.__myorder_id).value
         self.__delivery_email = Email(self.__mydelivery_email).value
         self.__myproduct_id, self.__myorder_type = self.check_order_id(self.__json_content)
         self.__alg = "SHA-256"
@@ -84,14 +85,6 @@ class OrderShipping():
     def delivery_day( self ):
         """Returns the delivery day for the order"""
         return self.__delivery_day
-
-    def validate_order_id(self, order_id:str)->str:
-        myregex = re.compile(r"[0-9a-fA-F]{32}$")
-        result = myregex.fullmatch(order_id)
-        if not result:
-            raise OrderManagementException("order id is not valid")
-        return order_id
-
 
     def read_json_file(self, input_file):
         try:
