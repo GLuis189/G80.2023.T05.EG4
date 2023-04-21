@@ -9,7 +9,7 @@ class JsonStore():
         pass
 
     def save_store(self, data: OrderRequest) -> True:
-        """Medthod for saving the orders store"""
+        """Method for saving the orders store"""
         file_store = JSON_FILES_PATH + "orders_store.json"
         # first read the file
         data_list = self.load_store(file_store)
