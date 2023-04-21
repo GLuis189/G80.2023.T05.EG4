@@ -36,3 +36,25 @@ class JsonStore():
             raise OrderManagementException("Wrong file or file path") from ex
         return True
 
+    @staticmethod
+    def save_orders_shipped(shipment: dict)->None:
+        """Saves the shipping object into a file"""
+        shimpents_store_file = JSON_FILES_PATH + "shipments_store.json"
+        # first read the file
+        try:
+            with open(shimpents_store_file, "r", encoding="utf-8", newline="") as file:
+                data_list = json.load(file)
+        except FileNotFoundError:
+            # file is not found , so  init my data_list
+            data_list = []
+        except json.JSONDecodeError as ex:
+            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
+
+        #append the shipments list
+        data_list.append(shipment.__dict__)
+
+        try:
+            with open(shimpents_store_file, "w", encoding="utf-8", newline="") as file:
+                json.dump(data_list, file, indent=2)
+        except FileNotFoundError as ex:
+            raise OrderManagementException("Wrong file or file path") from ex
