@@ -1,8 +1,6 @@
 """MODULE: order_request. Contains the order request class"""
 import hashlib
 import json
-import re
-from .order_management_exception import OrderManagementException
 from datetime import datetime
 from .attribute_phone_number import PhoneNumber
 from .attribute_address import Address
@@ -76,6 +74,8 @@ class OrderRequest:
     def zip_code( self ):
         """Returns the order's zip_code"""
         return self.__zip_code
+
+
 
 
 

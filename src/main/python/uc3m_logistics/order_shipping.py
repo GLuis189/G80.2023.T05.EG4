@@ -1,6 +1,8 @@
 """Contains the class OrderShipping"""
 from datetime import datetime
 import hashlib
+import re
+from .order_management_exception import OrderManagementException
 
 #pylint: disable=too-many-instance-attributes
 class OrderShipping():
@@ -10,7 +12,7 @@ class OrderShipping():
         self.__alg = "SHA-256"
         self.__type = "DS"
         self.__product_id = product_id
-        self.__order_id = order_id
+        self.__order_id = self.validate_order_id(order_id)
         self.__delivery_email = delivery_email
         justnow = datetime.utcnow()
         self.__issued_at = datetime.timestamp(justnow)
@@ -74,3 +76,10 @@ class OrderShipping():
     def delivery_day( self ):
         """Returns the delivery day for the order"""
         return self.__delivery_day
+
+    def validate_order_id(self, order_id:str)->str:
+        myregex = re.compile(r"[0-9a-fA-F]{32}$")
+        result = myregex.fullmatch(order_id)
+        if not result:
+            raise OrderManagementException("order id is not valid")
+        return order_id
