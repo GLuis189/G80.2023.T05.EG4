@@ -70,3 +70,14 @@ class JsonStore():
         except FileNotFoundError as ex:
             raise OrderManagementException("shipments_store not found") from ex
         return data_list
+
+    def find_tracking_code(self, data_list, tracking_code):
+        # search this tracking_code
+        found = False
+        for item in data_list:
+            if item["_OrderShipping__tracking_code"] == tracking_code:
+                found = True
+                del_timestamp = item["_OrderShipping__delivery_day"]
+        if not found:
+            raise OrderManagementException("tracking_code is not found")
+        return del_timestamp
