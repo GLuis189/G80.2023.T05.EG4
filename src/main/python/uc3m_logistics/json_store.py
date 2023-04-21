@@ -81,3 +81,9 @@ class JsonStore():
         if not found:
             raise OrderManagementException("tracking_code is not found")
         return del_timestamp
+
+    def check_date(self, del_timestamp):
+        today = datetime.today().date()
+        delivery_date = datetime.fromtimestamp(del_timestamp).date()
+        if delivery_date != today:
+            raise OrderManagementException("Today is not the delivery date")
