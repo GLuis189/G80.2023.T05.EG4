@@ -108,7 +108,7 @@ class OrderManager:
     #pylint: disable=too-many-locals
     def send_product (self, input_file:str )->str:
         """Sends the order included in the input_file"""
-        data = self.read_json_file(input_file)
+        #data = self.read_json_file(input_file)
 
         email, order_id = self.validate_labels(data)
 
@@ -118,10 +118,7 @@ class OrderManager:
 
         product_id, order_type = self.check_order_id(data)
 
-        my_sign= OrderShipping(product_id=product_id,
-                               order_id=data["OrderID"],
-                               order_type=order_type,
-                               delivery_email=data["ContactEmail"])
+        my_sign= OrderShipping(input_file)
 
         #save the OrderShipping in shipments_store.json
 

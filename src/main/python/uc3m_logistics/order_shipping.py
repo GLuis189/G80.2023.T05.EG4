@@ -1,14 +1,16 @@
 """Contains the class OrderShipping"""
-from datetime import datetime
 import hashlib
 import re
+import json
+from datetime import datetime
 from .order_management_exception import OrderManagementException
 
 #pylint: disable=too-many-instance-attributes
 class OrderShipping():
     """Class representing the shipping of an order"""
 
-    def __init__(self, product_id, order_id, delivery_email, order_type):
+    def __init__(self, input_file):
+        self.__json_content = self.read_json_file(input_file)
         self.__alg = "SHA-256"
         self.__type = "DS"
         self.__product_id = product_id
@@ -90,3 +92,14 @@ class OrderShipping():
         result = myregex.fullmatch(email)
         if not result:
             raise OrderManagementException("contact email is not valid")
+
+    def read_json_file(self, input_file):
+        try:
+            with open(input_file, "r", encoding="utf-8", newline="") as file:
+                data = json.load(file)
+        except FileNotFoundError as exception:
+            # file is not found
+            raise OrderManagementException("File is not found") from exception
+        except json.JSONDecodeError as exception:
+            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from exception
+        return data
