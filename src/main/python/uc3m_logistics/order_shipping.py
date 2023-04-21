@@ -11,6 +11,8 @@ class OrderShipping():
 
     def __init__(self, input_file):
         self.__json_content = self.read_json_file(input_file)
+        self.validate_labels(self.__json_content)
+
         self.__alg = "SHA-256"
         self.__type = "DS"
         self.__product_id = product_id
@@ -103,3 +105,11 @@ class OrderShipping():
         except json.JSONDecodeError as exception:
             raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from exception
         return data
+
+    def validate_labels(self, data):
+        try:
+            order_id = data["OrderID"]
+            email = data["ContactEmail"]
+        except KeyError as exception:
+            raise OrderManagementException("Bad label") from exception
+        return email, order_id

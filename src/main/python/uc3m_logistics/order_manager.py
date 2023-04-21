@@ -110,7 +110,7 @@ class OrderManager:
         """Sends the order included in the input_file"""
         #data = self.read_json_file(input_file)
 
-        email, order_id = self.validate_labels(data)
+        #email, order_id = self.validate_labels(data)
 
         #check all the information
         self.validate_order_id(order_id)
