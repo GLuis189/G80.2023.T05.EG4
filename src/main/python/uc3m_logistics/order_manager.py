@@ -110,11 +110,7 @@ class OrderManager:
         """Sends the order included in the input_file"""
         data = self.read_json_file(input_file)
 
-        try:
-            order_id = data["OrderID"]
-            email = data["ContactEmail"]
-        except KeyError as exception:
-            raise OrderManagementException("Bad label") from exception
+        email, order_id = self.validate_labels(data)
 
         #check all the information
         self.validate_order_id(order_id)
@@ -159,6 +155,14 @@ class OrderManager:
         self.save_orders_shipped(my_sign)
 
         return my_sign.tracking_code
+
+    def validate_labels(self, data):
+        try:
+            order_id = data["OrderID"]
+            email = data["ContactEmail"]
+        except KeyError as exception:
+            raise OrderManagementException("Bad label") from exception
+        return email, order_id
 
     def read_json_file(self, input_file):
         try:
