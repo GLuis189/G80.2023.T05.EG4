@@ -7,6 +7,7 @@ from datetime import datetime
 from .attribute_phone_number import PhoneNumber
 from .attribute_address import Address
 from .attribute_order_type import OrderType
+from .attribute_zip_code import ZipCode
 
 
 class OrderRequest:
@@ -18,7 +19,7 @@ class OrderRequest:
         self.__delivery_address = Address(delivery_address).value
         self.__order_type = OrderType(order_type).value
         self.__phone_number = PhoneNumber(phone_number).value
-        self.__zip_code = self.validate_zip_code(zip_code)
+        self.__zip_code = ZipCode(zip_code).value
         justnow = datetime.utcnow()
         self.__time_stamp = datetime.timestamp(justnow)
         self.__order_id =  hashlib.md5(self.__str__().encode()).hexdigest()
@@ -75,12 +76,6 @@ class OrderRequest:
         """Returns the order's zip_code"""
         return self.__zip_code
 
-    def validate_zip_code(self, zip_code:str)->str:
-        if zip_code.isnumeric() and len(zip_code) == 5:
-            if (int(zip_code) > 52999 or int(zip_code) < 1000):
-                raise OrderManagementException("zip_code is not valid")
-        else:
-            raise OrderManagementException("zip_code format is not valid")
-        return zip_code
+
 
 
