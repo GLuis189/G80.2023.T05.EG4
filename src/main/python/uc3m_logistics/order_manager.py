@@ -108,14 +108,7 @@ class OrderManager:
     #pylint: disable=too-many-locals
     def send_product (self, input_file:str )->str:
         """Sends the order included in the input_file"""
-        try:
-            with open(input_file, "r", encoding="utf-8", newline="") as file:
-                data = json.load(file)
-        except FileNotFoundError as exception:
-            # file is not found
-            raise OrderManagementException("File is not found") from exception
-        except json.JSONDecodeError as exception:
-            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from exception
+        data = self.read_json_file(input_file)
 
         try:
             order_id = data["OrderID"]
@@ -166,6 +159,17 @@ class OrderManager:
         self.save_orders_shipped(my_sign)
 
         return my_sign.tracking_code
+
+    def read_json_file(self, input_file):
+        try:
+            with open(input_file, "r", encoding="utf-8", newline="") as file:
+                data = json.load(file)
+        except FileNotFoundError as exception:
+            # file is not found
+            raise OrderManagementException("File is not found") from exception
+        except json.JSONDecodeError as exception:
+            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from exception
+        return data
 
     def validate_email(self, email):
         regex_email = r'^[a-z0-9]+([\._]?[a-z0-9]+)+[@](\w+[.])+\w{2,3}$'
