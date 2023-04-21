@@ -14,16 +14,16 @@ class OrderShipping():
 
     def __init__(self, input_file):
         self.__json_content = self.read_json_file(input_file)
-        self.validate_labels(self.__json_content)
-
+        self.__mydelivery_email,self.__myorder_id = self.validate_labels(self.__json_content)
+        self.__order_id = self.validate_order_id(self.__myorder_id)
+        self.__delivery_email = self.validate_email(self.__mydelivery_email)
+        self.__myproduct_id, self.__myorder_type = self.check_order_id(self.__json_content)
         self.__alg = "SHA-256"
         self.__type = "DS"
-        self.__product_id = product_id
-        self.__order_id = self.validate_order_id(order_id)
-        self.__delivery_email = self.validate_email(delivery_email)
+        self.__product_id = self.__myproduct_id
         justnow = datetime.utcnow()
         self.__issued_at = datetime.timestamp(justnow)
-        if order_type == "Regular":
+        if self.__myorder_type == "Regular":
             delivery_days = 7
         else:
             delivery_days = 1
