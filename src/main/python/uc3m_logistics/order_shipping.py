@@ -3,7 +3,10 @@ import hashlib
 import re
 import json
 from datetime import datetime
+from freezegun import freeze_time
 from .order_management_exception import OrderManagementException
+from .order_manager_config import JSON_FILES_PATH
+from .order_request import OrderRequest
 
 #pylint: disable=too-many-instance-attributes
 class OrderShipping():
@@ -113,3 +116,32 @@ class OrderShipping():
         except KeyError as exception:
             raise OrderManagementException("Bad label") from exception
         return email, order_id
+
+    def check_order_id(self, data):
+        file_store = JSON_FILES_PATH + "orders_store.json"
+        with open(file_store, "r", encoding="utf-8", newline="") as file:
+            data_list = json.load(file)
+        found = False
+        for item in data_list:
+            if item["_OrderRequest__order_id"] == data["OrderID"]:
+                found = True
+                # retrieve the orders data
+                product_id = item["_OrderRequest__product_id"]
+                address = item["_OrderRequest__delivery_address"]
+                register_type = item["_OrderRequest__order_type"]
+                phone = item["_OrderRequest__phone_number"]
+                order_timestamp = item["_OrderRequest__time_stamp"]
+                zip_code = item["_OrderRequest__zip_code"]
+                # set the time when the order was registered for checking the md5
+                with freeze_time(datetime.fromtimestamp(order_timestamp).date()):
+                    order = OrderRequest(product_id=product_id,
+                                         delivery_address=address,
+                                         order_type=register_type,
+                                         phone_number=phone,
+                                         zip_code=zip_code)
+
+                if order.order_id != data["OrderID"]:
+                    raise OrderManagementException("Orders' data have been manipulated")
+        if not found:
+            raise OrderManagementException("order_id not found")
+        return product_id, register_type
