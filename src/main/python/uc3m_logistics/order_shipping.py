@@ -13,7 +13,7 @@ class OrderShipping():
         self.__type = "DS"
         self.__product_id = product_id
         self.__order_id = self.validate_order_id(order_id)
-        self.__delivery_email = delivery_email
+        self.__delivery_email = self.validate_email(delivery_email)
         justnow = datetime.utcnow()
         self.__issued_at = datetime.timestamp(justnow)
         if order_type == "Regular":
@@ -83,3 +83,10 @@ class OrderShipping():
         if not result:
             raise OrderManagementException("order id is not valid")
         return order_id
+
+    def validate_email(self, email:str)->str:
+        regex_email = r'^[a-z0-9]+([\._]?[a-z0-9]+)+[@](\w+[.])+\w{2,3}$'
+        myregex = re.compile(regex_email)
+        result = myregex.fullmatch(email)
+        if not result:
+            raise OrderManagementException("contact email is not valid")
