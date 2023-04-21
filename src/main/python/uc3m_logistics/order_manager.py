@@ -117,16 +117,16 @@ class OrderManager:
         except json.JSONDecodeError as exception:
             raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from exception
 
-        #check all the information
         try:
-            self.validate_order_id(data)
-        except KeyError as exception:
-            raise  OrderManagementException("Bad label") from exception
-
-        try:
-            self.validate_email(data)
+            order_id = data["OrderID"]
+            email = data["ContactEmail"]
         except KeyError as exception:
             raise OrderManagementException("Bad label") from exception
+
+        #check all the information
+        self.validate_order_id(order_id)
+        self.validate_email(email)
+
         file_store = JSON_FILES_PATH + "orders_store.json"
 
         with open(file_store, "r", encoding="utf-8", newline="") as file:
@@ -167,16 +167,16 @@ class OrderManager:
 
         return my_sign.tracking_code
 
-    def validate_email(self, data:str):
+    def validate_email(self, email):
         regex_email = r'^[a-z0-9]+([\._]?[a-z0-9]+)+[@](\w+[.])+\w{2,3}$'
         myregex = re.compile(regex_email)
-        result = myregex.fullmatch(data["ContactEmail"])
+        result = myregex.fullmatch(email)
         if not result:
             raise OrderManagementException("contact email is not valid")
 
-    def validate_order_id(self, data:str)->None:
+    def validate_order_id(self, order_id)->None:
         myregex = re.compile(r"[0-9a-fA-F]{32}$")
-        result = myregex.fullmatch(data["OrderID"])
+        result = myregex.fullmatch(order_id)
         if not result:
             raise OrderManagementException("order id is not valid")
 
