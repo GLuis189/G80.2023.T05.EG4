@@ -116,22 +116,35 @@ class OrderManager:
         self.validate_order_id(order_id)
         self.validate_email(email)
 
-        file_store = JSON_FILES_PATH + "orders_store.json"
+        product_id, order_type = self.check_order_id(data)
 
+        my_sign= OrderShipping(product_id=product_id,
+                               order_id=data["OrderID"],
+                               order_type=order_type,
+                               delivery_email=data["ContactEmail"])
+
+        #save the OrderShipping in shipments_store.json
+
+        self.save_orders_shipped(my_sign)
+
+        return my_sign.tracking_code
+
+    def check_order_id(self, data):
+        file_store = JSON_FILES_PATH + "orders_store.json"
         with open(file_store, "r", encoding="utf-8", newline="") as file:
             data_list = json.load(file)
         found = False
         for item in data_list:
             if item["_OrderRequest__order_id"] == data["OrderID"]:
                 found = True
-                #retrieve the orders data
+                # retrieve the orders data
                 product_id = item["_OrderRequest__product_id"]
                 address = item["_OrderRequest__delivery_address"]
                 register_type = item["_OrderRequest__order_type"]
                 phone = item["_OrderRequest__phone_number"]
                 order_timestamp = item["_OrderRequest__time_stamp"]
                 zip_code = item["_OrderRequest__zip_code"]
-                #set the time when the order was registered for checking the md5
+                # set the time when the order was registered for checking the md5
                 with freeze_time(datetime.fromtimestamp(order_timestamp).date()):
                     order = OrderRequest(product_id=product_id,
                                          delivery_address=address,
@@ -141,20 +154,9 @@ class OrderManager:
 
                 if order.order_id != data["OrderID"]:
                     raise OrderManagementException("Orders' data have been manipulated")
-
         if not found:
             raise OrderManagementException("order_id not found")
-
-        my_sign= OrderShipping(product_id=product_id,
-                               order_id=data["OrderID"],
-                               order_type=register_type,
-                               delivery_email=data["ContactEmail"])
-
-        #save the OrderShipping in shipments_store.json
-
-        self.save_orders_shipped(my_sign)
-
-        return my_sign.tracking_code
+        return product_id, register_type
 
     def validate_labels(self, data):
         try:
