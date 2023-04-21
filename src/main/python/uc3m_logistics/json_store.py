@@ -19,12 +19,15 @@ class JsonStore():
             data_list.append(data.__dict__)
         else:
             raise OrderManagementException("order_id is already registered in orders_store")
+        self.save_data(data_list, file_store)
+        return True
+
+    def save_data(self, data_list, file_store):
         try:
             with open(file_store, "w", encoding="utf-8", newline="") as file:
                 json.dump(data_list, file, indent=2)
         except FileNotFoundError as ex:
             raise OrderManagementException("Wrong file or file path") from ex
-        return True
 
     def find_data(self, data, data_list):
         found = False
@@ -53,11 +56,7 @@ class JsonStore():
         #append the shipments list
         data_list.append(shipment.__dict__)
 
-        try:
-            with open(shimpents_store_file, "w", encoding="utf-8", newline="") as file:
-                json.dump(data_list, file, indent=2)
-        except FileNotFoundError as ex:
-            raise OrderManagementException("Wrong file or file path") from ex
+        self.save_data(data_list, shimpents_store_file)
 
     def read_shipping_store(self):
         shimpents_store_file = JSON_FILES_PATH + "shipments_store.json"
@@ -102,8 +101,4 @@ class JsonStore():
             # append the delivery info
         data_list.append(str(tracking_code))
         data_list.append(str(datetime.utcnow()))
-        try:
-            with open(shipments_file, "w", encoding="utf-8", newline="") as file:
-                json.dump(data_list, file, indent=2)
-        except FileNotFoundError as ex:
-            raise OrderManagementException("Wrong file or file path") from ex
+        self.save_data(data_list, shipments_file)
