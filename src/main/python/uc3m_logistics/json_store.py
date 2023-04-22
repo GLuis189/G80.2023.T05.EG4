@@ -89,14 +89,8 @@ class JsonStore():
 
     def save_delivere_store(self, tracking_code):
         shipments_file = JSON_FILES_PATH + "shipments_delivered.json"
-        try:
-            with open(shipments_file, "r", encoding="utf-8", newline="") as file:
-                data_list = json.load(file)
-        except FileNotFoundError as ex:
-            # file is not found , so  init my data_list
-            data_list = []
-        except json.JSONDecodeError as ex:
-            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from ex
+
+        data_list = self.load_store(shipments_file)
 
             # append the delivery info
         data_list.append(str(tracking_code))
