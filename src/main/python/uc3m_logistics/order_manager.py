@@ -10,7 +10,7 @@ from .order_shipping import OrderShipping
 from .order_delivered import OrderDelivered
 from .order_manager_config import JSON_FILES_PATH
 from .json_store import JsonStore
-
+from .json_store_order import JsonOrderStore
 class OrderManager:
     """Class for providing the methods for managing the orders process"""
     def __init__(self):
@@ -42,8 +42,8 @@ class OrderManager:
                                 zip_code)
 
         #self.save_store(my_order)
-        my_store =JsonStore()
-        my_store.save_store(my_order)
+        my_store =JsonOrderStore()
+        my_store.add_item(my_order)
 
         return my_order.order_id
 
