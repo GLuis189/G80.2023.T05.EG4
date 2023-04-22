@@ -11,6 +11,7 @@ from .order_delivered import OrderDelivered
 from .order_manager_config import JSON_FILES_PATH
 from .json_store import JsonStore
 from .json_store_order import JsonOrderStore
+from .json_store_shipments import JsonShipmentsStore
 class OrderManager:
     """Class for providing the methods for managing the orders process"""
     def __init__(self):
@@ -54,8 +55,8 @@ class OrderManager:
 
         my_sign= OrderShipping(input_file)
 
-        my_ship_store = JsonStore()
-        my_ship_store.save_orders_shipped(my_sign)
+        my_ship_store = JsonShipmentsStore()
+        my_ship_store.add_item(my_sign.__dict__)
 
 
         return my_sign.tracking_code
