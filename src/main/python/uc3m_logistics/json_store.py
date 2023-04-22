@@ -1,8 +1,10 @@
 import json
+from datetime import datetime
 from .order_request import OrderRequest
 from .order_manager_config import JSON_FILES_PATH
 from .order_management_exception import OrderManagementException
-from datetime import datetime
+from .order_delivered import OrderDelivered
+
 
 class JsonStore():
     def __init__(self):
@@ -87,12 +89,11 @@ class JsonStore():
         if delivery_date != today:
             raise OrderManagementException("Today is not the delivery date")
 
-    def save_delivere_store(self, tracking_code):
+    def save_delivere_store(self, tracking_code:OrderDelivered):
         shipments_file = JSON_FILES_PATH + "shipments_delivered.json"
 
         data_list = self.load_store(shipments_file)
 
             # append the delivery info
-        data_list.append(str(tracking_code))
-        data_list.append(str(datetime.utcnow()))
+        data_list.append(tracking_code.__dict__)
         self.save_data(data_list, shipments_file)
