@@ -1,17 +1,13 @@
 """Module """
 import datetime
-import re
-import json
 from datetime import datetime
-from freezegun import freeze_time
 from .order_request import OrderRequest
 from .order_management_exception import OrderManagementException
 from .order_shipping import OrderShipping
 from .order_delivered import OrderDelivered
-from .order_manager_config import JSON_FILES_PATH
-from .json_store import JsonStore
 from .json_store_order import JsonOrderStore
 from .json_store_shipments import JsonShipmentsStore
+from .json_store_delivered import JsonDeliverStore
 class OrderManager:
     """Class for providing the methods for managing the orders process"""
     def __init__(self):
@@ -46,7 +42,7 @@ class OrderManager:
         my_sign= OrderShipping(input_file)
 
         my_ship_store = JsonShipmentsStore()
-        my_ship_store.add_item(my_sign.__dict__)
+        my_ship_store.add_item(my_sign)
 
 
         return my_sign.tracking_code
@@ -56,15 +52,25 @@ class OrderManager:
         """Register the delivery of the product"""
         my_deliver = OrderDelivered(tracking_code)
 
-        my_ship_store = JsonStore()
-
         #check if this tracking_code is in shipments_store
-        data_list = my_ship_store.read_shipping_store()
+        my_ship_store = JsonShipmentsStore()
+        data_list = my_ship_store.read_store()
+        item_found = my_ship_store.find_data(tracking_code)
+        if item_found:
+            del_timestamp = item_found["_OrderShipping__delivery_day"]
+        else:
+            raise OrderManagementException("tracking_code is not found")
 
-        del_timestamp = my_ship_store.find_tracking_code(data_list, tracking_code)
+        self.check_date(del_timestamp)
+        my_deliver_store = JsonDeliverStore()
+        my_deliver_store.add_item(my_deliver)
 
-        my_ship_store.check_date(del_timestamp)
-        my_ship_store.save_delivere_store(my_deliver)
         return True
 
+    def check_date(self, del_timestamp):
+        today = datetime.today().date()
+        delivery_date = datetime.fromtimestamp(del_timestamp).date()
+        if delivery_date != today:
+            raise OrderManagementException("Today is not the delivery date")
+        return today
 

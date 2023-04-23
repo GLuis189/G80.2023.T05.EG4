@@ -35,5 +35,5 @@ class JsonStoreMaster():
 
     def add_item(self, item):
         self.load_store()
-        self._data_list.append(item)
+        self._data_list.append(item.__dict__)
         self.save_store()
