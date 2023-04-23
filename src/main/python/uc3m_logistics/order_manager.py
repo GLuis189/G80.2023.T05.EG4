@@ -43,11 +43,7 @@ class OrderManager:
 
     def deliver_product(self, tracking_code:str)->True:
         """Register the delivery of the product"""
-        my_deliver = OrderDelivered(tracking_code)
-
-        my_deliver_store = JsonDeliverStore()
-        my_deliver_store.add_item(my_deliver)
-
+        OrderDelivered(tracking_code)
         return True
 
 
