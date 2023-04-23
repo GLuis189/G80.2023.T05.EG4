@@ -17,16 +17,6 @@ class OrderManager:
     def __init__(self):
         pass
 
-    @staticmethod
-    def validate_tracking_code(tracking_code: str)->None:
-        """Method for validating sha256 values"""
-        myregex = re.compile(r"[0-9a-fA-F]{64}$")
-        result = myregex.fullmatch(tracking_code)
-        if not result:
-            raise OrderManagementException("tracking_code format is not valid")
-
-
-
     #pylint: disable=too-many-arguments
     def register_order(self, product_id:str,
                         order_type:str,
