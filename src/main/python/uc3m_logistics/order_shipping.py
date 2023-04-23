@@ -9,6 +9,7 @@ from .order_manager_config import JSON_FILES_PATH
 from .order_request import OrderRequest
 from .attribute_email import Email
 from .attribute_order_id import OrderId
+from.json_store_shipments import JsonShipmentsStore
 
 #pylint: disable=too-many-instance-attributes
 class OrderShipping():
@@ -33,6 +34,8 @@ class OrderShipping():
         #__delivery_day must be expressed in senconds to be added to the timestap
         self.__delivery_day = self.__issued_at + (delivery_days * 24 * 60 * 60)
         self.__tracking_code = hashlib.sha256(self.__signature_string().encode()).hexdigest()
+        my_ship_store = JsonShipmentsStore()
+        my_ship_store.add_item(self)
 
     def __signature_string( self ):
         """Composes the string to be used for generating the tracking_code"""
