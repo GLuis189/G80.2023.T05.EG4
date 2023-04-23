@@ -51,30 +51,11 @@ class OrderManager:
         """Register the delivery of the product"""
         my_deliver = OrderDelivered(tracking_code)
 
-        del_timestamp = self.check_tracking_code(tracking_code)
-
-        self.check_date(del_timestamp)
 
         my_deliver_store = JsonDeliverStore()
         my_deliver_store.add_item(my_deliver)
 
         return True
 
-    def check_tracking_code(self, tracking_code):
-        # check if this tracking_code is in shipments_store
-        my_ship_store = JsonShipmentsStore()
-        data_list = my_ship_store.read_store()
-        item_found = my_ship_store.find_data(tracking_code)
-        if item_found:
-            del_timestamp = item_found["_OrderShipping__delivery_day"]
-        else:
-            raise OrderManagementException("tracking_code is not found")
-        return del_timestamp
 
-    def check_date(self, del_timestamp):
-        today = datetime.today().date()
-        delivery_date = datetime.fromtimestamp(del_timestamp).date()
-        if delivery_date != today:
-            raise OrderManagementException("Today is not the delivery date")
-        return today
 
