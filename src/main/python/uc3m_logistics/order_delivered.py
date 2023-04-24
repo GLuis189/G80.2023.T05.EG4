@@ -10,8 +10,7 @@ class OrderDelivered():
         self.__date_delivered = datetime.utcnow().__str__()
         del_timestamp = self.check_tracking_code(tracking_code)
         self.check_date(del_timestamp)
-        my_deliver_store = JsonDeliverStore()
-        my_deliver_store.add_item(self)
+
 
     def check_tracking_code(self, tracking_code):
         # check if this tracking_code is in shipments_store
@@ -30,3 +29,7 @@ class OrderDelivered():
         if delivery_date != today:
             raise OrderManagementException("Today is not the delivery date")
         return today
+
+    def crear_json(self):
+        my_deliver_store = JsonDeliverStore()
+        my_deliver_store.add_item(self)

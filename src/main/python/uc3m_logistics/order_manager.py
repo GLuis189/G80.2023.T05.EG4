@@ -24,9 +24,7 @@ class OrderManager:
                                 phone_number,
                                 zip_code)
 
-        my_store = JsonOrderStore()
-        my_store.add_item(my_order)
-
+        my_order.crear_json()
         return my_order.order_id
 
 
@@ -34,10 +32,12 @@ class OrderManager:
     def send_product (self, input_file:str )->str:
         """Sends the order included in the input_file"""
         my_sign = OrderShipping(input_file)
+        my_sign.crear_json()
         return my_sign.tracking_code
 
 
     def deliver_product(self, tracking_code:str)->True:
         """Register the delivery of the product"""
-        OrderDelivered(tracking_code)
+        my_deliver = OrderDelivered(tracking_code)
+        my_deliver.crear_json()
         return True

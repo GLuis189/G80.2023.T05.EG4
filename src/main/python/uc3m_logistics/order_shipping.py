@@ -33,8 +33,7 @@ class OrderShipping():
         #__delivery_day must be expressed in senconds to be added to the timestap
         self.__delivery_day = self.__issued_at + (delivery_days * 24 * 60 * 60)
         self.__tracking_code = hashlib.sha256(self.__signature_string().encode()).hexdigest()
-        my_ship_store = JsonShipmentsStore()
-        my_ship_store.add_item(self)
+
 
     def __signature_string( self ):
         """Composes the string to be used for generating the tracking_code"""
@@ -134,3 +133,7 @@ class OrderShipping():
         if order.order_id != data["OrderID"]:
             raise OrderManagementException("Orders' data have been manipulated")
         return product_id, register_type
+
+    def crear_json(self):
+        my_ship_store = JsonShipmentsStore()
+        my_ship_store.add_item(self)

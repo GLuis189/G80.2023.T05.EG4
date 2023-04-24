@@ -23,8 +23,8 @@ class OrderRequest:
         justnow = datetime.utcnow()
         self.__time_stamp = datetime.timestamp(justnow)
         self.__order_id = hashlib.md5(self.__str__().encode()).hexdigest()
-        """my_store = JsonOrderStore()
-        my_store.add_item(self)"""
+
+
 
     def __str__(self):
         return "OrderRequest:" + json.dumps(self.__dict__)
@@ -77,3 +77,7 @@ class OrderRequest:
     def zip_code( self ):
         """Returns the order's zip_code"""
         return self.__zip_code
+
+    def crear_json(self):
+        my_store = JsonOrderStore()
+        my_store.add_item(self)
