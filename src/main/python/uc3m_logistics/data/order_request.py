@@ -15,6 +15,7 @@ class OrderRequest:
     #pylint: disable=too-many-arguments
     def __init__( self, product_id:str, order_type:str,
                   delivery_address:str, phone_number:str, zip_code:str)->None:
+        """Constructor de la clase OrderRequest"""
         self.__product_id = ProductId(product_id).value
         self.__delivery_address = Address(delivery_address).value
         self.__order_type = OrderType(order_type).value
@@ -27,6 +28,7 @@ class OrderRequest:
 
 
     def __str__(self):
+        """Función str"""
         return "OrderRequest:" + json.dumps(self.__dict__)
 
     @property
@@ -37,6 +39,7 @@ class OrderRequest:
 
     @delivery_address.setter
     def delivery_address( self, value:str )->None:
+        """Setter delivery address"""
         self.__delivery_address = value
 
     @property
@@ -45,6 +48,7 @@ class OrderRequest:
         return self.__order_type
     @order_type.setter
     def order_type( self, value:str )->None:
+        """Setter order type"""
         self.__order_type = value
 
     @property
@@ -53,6 +57,7 @@ class OrderRequest:
         return self.__phone_number
     @phone_number.setter
     def phone_number( self, value:str )->None:
+        """Setter phone number"""
         self.__phone_number = value
 
     @property
@@ -61,6 +66,7 @@ class OrderRequest:
         return self.__product_id
     @product_id.setter
     def product_id( self, value:str )->None:
+        """Setter the product_id"""
         self.__product_id = value
 
     @property
@@ -79,5 +85,6 @@ class OrderRequest:
         return self.__zip_code
 
     def crear_json(self)->None:
+        """Crear el json"""
         my_store = JsonOrderStore()
         my_store.add_item(self)

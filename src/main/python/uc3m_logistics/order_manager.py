@@ -15,7 +15,6 @@ class OrderManager:
     def __init__(self)->None:
         pass
 
-    #pylint: disable=too-many-arguments
     def register_order(self, product_id:str,
                         order_type:str,
                         address:str,

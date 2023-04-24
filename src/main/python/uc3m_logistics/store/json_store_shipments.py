@@ -13,7 +13,8 @@ class JsonShipmentsStore(JsonStoreMaster):
             JsonShipmentsStore.__instance = object.__new__(cls)
         return JsonShipmentsStore.__instance
     def __init__(self)->None:
-        pass
+        """Constructor de JsonDeliverStore"""
+        super(JsonStoreMaster, self).__init__()
     def read_store(self)->any:
         # first read the file
         try:

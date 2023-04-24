@@ -3,6 +3,7 @@
 class OrderManagementException(Exception):
     """Personalised exception for Order Management"""
     def __init__(self, message:str)->None:
+        """Cosntructor de la clase OrderManagerException"""
         self.__message = message
         super().__init__(self.message)
 
@@ -13,4 +14,5 @@ class OrderManagementException(Exception):
 
     @message.setter
     def message(self,value:str)->None:
+        """Setter message"""
         self.__message = value

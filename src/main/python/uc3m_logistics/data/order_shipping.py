@@ -15,6 +15,7 @@ class OrderShipping():
     """Class representing the shipping of an order"""
 
     def __init__(self, input_file:str)->None:
+        """Constructor de la clase OrderShipping"""
         self.__json_content = self.read_json_file(input_file)
         self.__mydelivery_email,self.__myorder_id = self.validate_labels(self.__json_content)
         self.__order_id = OrderId(self.__myorder_id).value
@@ -88,6 +89,7 @@ class OrderShipping():
         return self.__delivery_day
 
     def read_json_file(self, input_file:str)->any:
+        """Lee el fichero y crea data"""
         try:
             with open(input_file, "r", encoding="utf-8", newline="") as file:
                 data = json.load(file)
@@ -99,6 +101,7 @@ class OrderShipping():
         return data
 
     def validate_labels(self, data:any)->(str, str):
+        """Valida las keys de data"""
         try:
             order_id = data["OrderID"]
             email = data["ContactEmail"]
@@ -107,6 +110,7 @@ class OrderShipping():
         return email, order_id
 
     def check_order_id(self, data:any)->(str,str):
+        """Comprueba el order id"""
         my_store = JsonOrderStore()
         my_store.load_store()
         item = my_store.find_data(data["OrderID"])
@@ -117,6 +121,7 @@ class OrderShipping():
         return product_id, register_type
 
     def check_manipulated(self, data:any, item:any)->(str,str):
+        """Comprueba que no se haya manipualdo"""
         product_id = item["_OrderRequest__product_id"]
         address = item["_OrderRequest__delivery_address"]
         register_type = item["_OrderRequest__order_type"]
@@ -135,5 +140,6 @@ class OrderShipping():
         return product_id, register_type
 
     def crear_json(self)->None:
+        """Crea el json"""
         my_ship_store = JsonShipmentsStore()
         my_ship_store.add_item(self)
