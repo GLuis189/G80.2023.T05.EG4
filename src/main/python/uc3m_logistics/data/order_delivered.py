@@ -1,6 +1,6 @@
 """MODULES"""
 from datetime import datetime, date
-from uc3m_logistics.data.data_attr.attribute_tracking_code import Tracking_code
+from uc3m_logistics.data.data_attr.attribute_tracking_code import TrackingCode
 from uc3m_logistics.store.json_store_shipments import JsonShipmentsStore
 from uc3m_logistics.store.json_store_delivered import JsonDeliverStore
 from uc3m_logistics.exception.order_management_exception import OrderManagementException
@@ -9,7 +9,7 @@ class OrderDelivered():
     """Clase OrderDelivered"""
     def __init__(self, tracking_code:str)->None:
         """Constructor OrderDelivered"""
-        self.__tracking_code = Tracking_code(tracking_code).value
+        self.__tracking_code = TrackingCode(tracking_code).value
         self.__date_delivered = datetime.utcnow().__str__()
         del_timestamp = self.check_tracking_code(tracking_code)
         self.check_date(del_timestamp)

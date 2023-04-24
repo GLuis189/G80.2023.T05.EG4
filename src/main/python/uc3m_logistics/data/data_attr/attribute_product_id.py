@@ -1,8 +1,12 @@
+"""MODULES"""
 from uc3m_logistics.data.data_attr.attribute import Attribute
 from uc3m_logistics.exception.order_management_exception import OrderManagementException
 
 class ProductId(Attribute):
+    """Clase hija,atributo ProductId"""
     def __init__(self, attr_value:str)->None:
+        """Constructor"""
+        super().__init__()
         self._error_message = "Invalid EAN13 code string"
         self._validation_pattern = r"^[0-9]{13}$"
         self._attr_value = self._validate(attr_value)
