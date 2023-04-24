@@ -6,7 +6,7 @@ from uc3m_logistics.data.order_delivered import OrderDelivered
 
 class OrderManager:
     """Class for providing the methods for managing the orders process"""
-    def __init__(self):
+    def __init__(self)->None:
         pass
 
     #pylint: disable=too-many-arguments

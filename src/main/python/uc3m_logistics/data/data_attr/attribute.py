@@ -3,7 +3,7 @@ import re
 from uc3m_logistics.exception.order_management_exception import OrderManagementException
 
 class Attribute():
-    def __init__(self):
+    def __init__(self)->None:
         self._attr_value= ""
         self._error_message = ""
         self._validation_pattern = r""
@@ -17,10 +17,10 @@ class Attribute():
         return value
 
     @property
-    def value(self):
+    def value(self)->str:
         return self._attr_value
 
     @value.setter
-    def value(self, attr_value):
+    def value(self, attr_value:str)->None:
         self._attr_value = attr_value
 

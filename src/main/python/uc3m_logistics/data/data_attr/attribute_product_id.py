@@ -2,7 +2,7 @@ from uc3m_logistics.data.data_attr.attribute import Attribute
 from uc3m_logistics.exception.order_management_exception import OrderManagementException
 
 class ProductId(Attribute):
-    def __init__(self, attr_value):
+    def __init__(self, attr_value:str)->None:
         self._error_message = "Invalid EAN13 code string"
         self._validation_pattern = r"^[0-9]{13}$"
         self._attr_value = self._validate(attr_value)
@@ -13,7 +13,6 @@ class ProductId(Attribute):
         # RETURN TRUE IF THE EAN13 IS RIGHT, OR FALSE IN OTHER CASE
         checksum = 0
         code_read = -1
-        result = False
 
         super()._validate(attr_value)
 
@@ -28,8 +27,6 @@ class ProductId(Attribute):
                 checksum += (current_digit) * 3 if (i % 2 != 0) else current_digit
         control_digit = (10 - (checksum % 10)) % 10
 
-        if (code_read != -1) and (code_read == control_digit):
-            result = True
-        else:
+        if (code_read == -1) or (code_read != control_digit):
             raise OrderManagementException("Invalid EAN13 control digit")
         return attr_value

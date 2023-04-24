@@ -5,5 +5,5 @@ class JsonDeliverStore(JsonStoreMaster):
     _FILE_PATH = JSON_FILES_PATH + "shipments_delivered.json"
     _data_list = []
     _ID_FIELD = ""
-    def __init__(self):
+    def __init__(self)->None:
         pass

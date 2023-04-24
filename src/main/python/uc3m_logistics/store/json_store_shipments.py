@@ -7,9 +7,9 @@ class JsonShipmentsStore(JsonStoreMaster):
     _FILE_PATH = JSON_FILES_PATH + "shipments_store.json"
     _data_list = []
     _ID_FIELD = "_OrderShipping__tracking_code"
-    def __init__(self):
+    def __init__(self)->None:
         pass
-    def read_store(self):
+    def read_store(self)->any:
         # first read the file
         try:
             with open(self._FILE_PATH, "r", encoding="utf-8", newline="") as file:

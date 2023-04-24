@@ -13,8 +13,8 @@ from uc3m_logistics.store.json_store_order import JsonOrderStore
 class OrderRequest:
     """Class representing the register of the order in the system"""
     #pylint: disable=too-many-arguments
-    def __init__( self, product_id, order_type,
-                  delivery_address, phone_number, zip_code ):
+    def __init__( self, product_id:str, order_type:str,
+                  delivery_address:str, phone_number:str, zip_code:str)->None:
         self.__product_id = ProductId(product_id).value
         self.__delivery_address = Address(delivery_address).value
         self.__order_type = OrderType(order_type).value
@@ -30,54 +30,54 @@ class OrderRequest:
         return "OrderRequest:" + json.dumps(self.__dict__)
 
     @property
-    def delivery_address( self ):
+    def delivery_address( self )->str:
         """Property representing the address where the product
         must be delivered"""
         return self.__delivery_address
 
     @delivery_address.setter
-    def delivery_address( self, value ):
+    def delivery_address( self, value:str )->None:
         self.__delivery_address = value
 
     @property
-    def order_type( self ):
+    def order_type( self )->str:
         """Property representing the type of order: REGULAR or PREMIUM"""
         return self.__order_type
     @order_type.setter
-    def order_type( self, value ):
+    def order_type( self, value:str )->None:
         self.__order_type = value
 
     @property
-    def phone_number( self ):
+    def phone_number( self )->str:
         """Property representing the clients's phone number"""
         return self.__phone_number
     @phone_number.setter
-    def phone_number( self, value ):
+    def phone_number( self, value:str )->None:
         self.__phone_number = value
 
     @property
-    def product_id( self ):
+    def product_id( self )->str:
         """Property representing the products  EAN13 code"""
         return self.__product_id
     @product_id.setter
-    def product_id( self, value ):
+    def product_id( self, value:str )->None:
         self.__product_id = value
 
     @property
-    def time_stamp(self):
+    def time_stamp(self)->float:
         """Read-only property that returns the timestamp of the request"""
         return self.__time_stamp
 
     @property
-    def order_id( self ):
+    def order_id( self )->str:
         """Returns the md5 signature"""
         return self.__order_id
 
     @property
-    def zip_code( self ):
+    def zip_code( self )->str:
         """Returns the order's zip_code"""
         return self.__zip_code
 
-    def crear_json(self):
+    def crear_json(self)->None:
         my_store = JsonOrderStore()
         my_store.add_item(self)
