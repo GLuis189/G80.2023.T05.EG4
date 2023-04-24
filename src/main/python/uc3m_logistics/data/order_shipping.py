@@ -116,7 +116,7 @@ class OrderShipping():
             raise OrderManagementException("order_id not found")
         return product_id, register_type
 
-    def check_manipulated(self, data:any, item:dict)->(str,str):
+    def check_manipulated(self, data:any, item:any)->(str,str):
         product_id = item["_OrderRequest__product_id"]
         address = item["_OrderRequest__delivery_address"]
         register_type = item["_OrderRequest__order_type"]
