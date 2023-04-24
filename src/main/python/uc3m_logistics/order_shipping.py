@@ -1,11 +1,9 @@
 """Contains the class OrderShipping"""
 import hashlib
-import re
 import json
 from datetime import datetime
 from freezegun import freeze_time
 from .order_management_exception import OrderManagementException
-from .order_manager_config import JSON_FILES_PATH
 from .order_request import OrderRequest
 from .attribute_email import Email
 from .attribute_order_id import OrderId

@@ -1,13 +1,9 @@
 """Module """
-import datetime
-from datetime import datetime
 from .order_request import OrderRequest
-from .order_management_exception import OrderManagementException
 from .order_shipping import OrderShipping
 from .order_delivered import OrderDelivered
 from .json_store_order import JsonOrderStore
-from .json_store_shipments import JsonShipmentsStore
-from .json_store_delivered import JsonDeliverStore
+
 class OrderManager:
     """Class for providing the methods for managing the orders process"""
     def __init__(self):
@@ -28,7 +24,7 @@ class OrderManager:
                                 phone_number,
                                 zip_code)
 
-        my_store =JsonOrderStore()
+        my_store = JsonOrderStore()
         my_store.add_item(my_order)
 
         return my_order.order_id
