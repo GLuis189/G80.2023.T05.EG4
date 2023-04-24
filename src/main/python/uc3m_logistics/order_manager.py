@@ -37,7 +37,7 @@ class OrderManager:
     #pylint: disable=too-many-locals
     def send_product (self, input_file:str )->str:
         """Sends the order included in the input_file"""
-        my_sign= OrderShipping(input_file)
+        my_sign = OrderShipping(input_file)
         return my_sign.tracking_code
 
 
@@ -45,6 +45,3 @@ class OrderManager:
         """Register the delivery of the product"""
         OrderDelivered(tracking_code)
         return True
-
-
-

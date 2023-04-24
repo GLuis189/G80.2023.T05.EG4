@@ -10,6 +10,7 @@ from .order_request import OrderRequest
 from .attribute_email import Email
 from .attribute_order_id import OrderId
 from.json_store_shipments import JsonShipmentsStore
+from .json_store_order import JsonOrderStore
 
 #pylint: disable=too-many-instance-attributes
 class OrderShipping():
@@ -109,30 +110,29 @@ class OrderShipping():
         return email, order_id
 
     def check_order_id(self, data):
-        file_store = JSON_FILES_PATH + "orders_store.json"
-        with open(file_store, "r", encoding="utf-8", newline="") as file:
-            data_list = json.load(file)
-        found = False
-        for item in data_list:
-            if item["_OrderRequest__order_id"] == data["OrderID"]:
-                found = True
-                # retrieve the orders data
-                product_id = item["_OrderRequest__product_id"]
-                address = item["_OrderRequest__delivery_address"]
-                register_type = item["_OrderRequest__order_type"]
-                phone = item["_OrderRequest__phone_number"]
-                order_timestamp = item["_OrderRequest__time_stamp"]
-                zip_code = item["_OrderRequest__zip_code"]
-                # set the time when the order was registered for checking the md5
-                with freeze_time(datetime.fromtimestamp(order_timestamp).date()):
-                    order = OrderRequest(product_id=product_id,
-                                         delivery_address=address,
-                                         order_type=register_type,
-                                         phone_number=phone,
-                                         zip_code=zip_code)
-
-                if order.order_id != data["OrderID"]:
-                    raise OrderManagementException("Orders' data have been manipulated")
-        if not found:
+        my_store = JsonOrderStore()
+        my_store.load_store()
+        item = my_store.find_data(data["OrderID"])
+        if item:
+            product_id, register_type = self.check_manipulated(data, item)
+        else:
             raise OrderManagementException("order_id not found")
+        return product_id, register_type
+
+    def check_manipulated(self, data, item):
+        product_id = item["_OrderRequest__product_id"]
+        address = item["_OrderRequest__delivery_address"]
+        register_type = item["_OrderRequest__order_type"]
+        phone = item["_OrderRequest__phone_number"]
+        order_timestamp = item["_OrderRequest__time_stamp"]
+        zip_code = item["_OrderRequest__zip_code"]
+        # set the time when the order was registered for checking the md5
+        with freeze_time(datetime.fromtimestamp(order_timestamp).date()):
+            order = OrderRequest(product_id=product_id,
+                                 delivery_address=address,
+                                 order_type=register_type,
+                                 phone_number=phone,
+                                 zip_code=zip_code)
+        if order.order_id != data["OrderID"]:
+            raise OrderManagementException("Orders' data have been manipulated")
         return product_id, register_type
