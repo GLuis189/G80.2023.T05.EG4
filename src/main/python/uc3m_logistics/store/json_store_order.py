@@ -6,6 +6,11 @@ class JsonOrderStore(JsonStoreMaster):
     _FILE_PATH = JSON_FILES_PATH + "orders_store.json"
     _data_list = []
     _ID_FIELD = "_OrderRequest__order_id"
+    __instance = None
+    def __new__(cls):
+        if JsonOrderStore.__instance is None:
+            JsonOrderStore.__instance = object.__new__(cls)
+        return JsonOrderStore.__instance
     def __init__(self)->None:
         pass
     def add_item(self, item:any)->None:

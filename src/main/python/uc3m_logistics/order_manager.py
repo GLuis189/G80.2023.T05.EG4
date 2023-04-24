@@ -6,6 +6,12 @@ from uc3m_logistics.data.order_delivered import OrderDelivered
 
 class OrderManager:
     """Class for providing the methods for managing the orders process"""
+
+    __instance = None
+    def __new__(cls):
+        if OrderManager.__instance is None:
+            OrderManager.__instance = object.__new__(cls)
+        return OrderManager.__instance
     def __init__(self)->None:
         pass
 
