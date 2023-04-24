@@ -10,7 +10,7 @@ class OrderDelivered():
     def __init__(self, tracking_code:str)->None:
         """Constructor OrderDelivered"""
         self.__tracking_code = TrackingCode(tracking_code).value
-        self.__date_delivered = datetime.utcnow().__str__()
+        self.__date_delivered = str(datetime.utcnow())
         del_timestamp = self.check_tracking_code(tracking_code)
         self.check_date(del_timestamp)
 
@@ -39,3 +39,11 @@ class OrderDelivered():
         """Crea el json"""
         my_deliver_store = JsonDeliverStore()
         my_deliver_store.add_item(self)
+
+    def get_tracking_code(self)->str:
+        """Coge tracking_code, para utilizarlo"""
+        return self.__tracking_code
+
+    def get_date_delivered(self)->str:
+        """Coge la fecha de entrega"""
+        return self.__date_delivered
