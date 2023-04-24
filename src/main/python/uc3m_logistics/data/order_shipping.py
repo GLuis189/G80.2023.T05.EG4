@@ -3,12 +3,12 @@ import hashlib
 import json
 from datetime import datetime
 from freezegun import freeze_time
-from .order_management_exception import OrderManagementException
-from .order_request import OrderRequest
-from .attribute_email import Email
-from .attribute_order_id import OrderId
-from.json_store_shipments import JsonShipmentsStore
-from .json_store_order import JsonOrderStore
+from uc3m_logistics.exception.order_management_exception import OrderManagementException
+from uc3m_logistics.data.order_request import OrderRequest
+from uc3m_logistics.data.data_attr.attribute_email import Email
+from uc3m_logistics.data.data_attr.attribute_order_id import OrderId
+from uc3m_logistics.store.json_store_shipments import JsonShipmentsStore
+from uc3m_logistics.store.json_store_order import JsonOrderStore
 
 #pylint: disable=too-many-instance-attributes
 class OrderShipping():
@@ -131,7 +131,7 @@ class OrderShipping():
                                  phone_number=phone,
                                  zip_code=zip_code)
         if order.order_id != data["OrderID"]:
-            raise OrderManagementException("Orders' data have been manipulated")
+            raise OrderManagementException("Orders' data_attr have been manipulated")
         return product_id, register_type
 
     def crear_json(self):

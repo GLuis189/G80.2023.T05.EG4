@@ -2,12 +2,12 @@
 import hashlib
 import json
 from datetime import datetime
-from .attribute_phone_number import PhoneNumber
-from .attribute_address import Address
-from .attribute_order_type import OrderType
-from .attribute_zip_code import ZipCode
-from .attribute_product_id import ProductId
-from .json_store_order import JsonOrderStore
+from uc3m_logistics.data.data_attr.attribute_phone_number import PhoneNumber
+from uc3m_logistics.data.data_attr.attribute_address import Address
+from uc3m_logistics.data.data_attr.attribute_order_type import OrderType
+from uc3m_logistics.data.data_attr.attribute_zip_code import ZipCode
+from uc3m_logistics.data.data_attr.attribute_product_id import ProductId
+from uc3m_logistics.store.json_store_order import JsonOrderStore
 
 
 class OrderRequest:

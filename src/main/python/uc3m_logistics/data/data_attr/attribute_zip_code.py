@@ -1,5 +1,5 @@
-from .attribute import Attribute
-from .order_management_exception import OrderManagementException
+from uc3m_logistics.data.data_attr.attribute import Attribute
+from uc3m_logistics.exception.order_management_exception import OrderManagementException
 
 class ZipCode(Attribute):
     def __init__(self, attr_value):

@@ -219,5 +219,5 @@ class TestSendProduct(TestCase):
         else:
             hash_new = ""
 
-        self.assertEqual(exception_message, "Orders' data have been manipulated")
+        self.assertEqual(exception_message, "Orders' data_attr have been manipulated")
         self.assertEqual(hash_new, hash_original)

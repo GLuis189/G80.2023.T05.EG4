@@ -1,8 +1,8 @@
 """Module """
-from .order_request import OrderRequest
-from .order_shipping import OrderShipping
-from .order_delivered import OrderDelivered
-from .json_store_order import JsonOrderStore
+from uc3m_logistics.data.order_request import OrderRequest
+from uc3m_logistics.data.order_shipping import OrderShipping
+from uc3m_logistics.data.order_delivered import OrderDelivered
+
 
 class OrderManager:
     """Class for providing the methods for managing the orders process"""

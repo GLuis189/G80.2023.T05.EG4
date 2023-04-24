@@ -1,8 +1,8 @@
 from datetime import datetime
-from .attribute_tracking_code import Tracking_code
-from .json_store_shipments import JsonShipmentsStore
-from .json_store_delivered import JsonDeliverStore
-from .order_management_exception import OrderManagementException
+from uc3m_logistics.data.data_attr.attribute_tracking_code import Tracking_code
+from uc3m_logistics.store.json_store_shipments import JsonShipmentsStore
+from uc3m_logistics.store.json_store_delivered import JsonDeliverStore
+from uc3m_logistics.exception.order_management_exception import OrderManagementException
 
 class OrderDelivered():
     def __init__(self, tracking_code):
