@@ -1,9 +1,11 @@
+"""MODULES"""
 import json
 from uc3m_logistics.store.json_store_master import JsonStoreMaster
 from uc3m_logistics.config.order_manager_config import JSON_FILES_PATH
 from uc3m_logistics.exception.order_management_exception import OrderManagementException
 
 class JsonShipmentsStore(JsonStoreMaster):
+    """Clase JsonShipment"""
     _FILE_PATH = JSON_FILES_PATH + "shipments_store.json"
     _data_list = []
     _ID_FIELD = "_OrderShipping__tracking_code"
@@ -16,6 +18,7 @@ class JsonShipmentsStore(JsonStoreMaster):
         """Constructor de JsonDeliverStore"""
         super(JsonStoreMaster, self).__init__()
     def read_store(self)->any:
+        """Leer"""
         # first read the file
         try:
             with open(self._FILE_PATH, "r", encoding="utf-8", newline="") as file:

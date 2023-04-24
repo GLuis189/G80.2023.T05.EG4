@@ -1,3 +1,4 @@
+"""MODULES"""
 from uc3m_logistics.store.json_store_master import JsonStoreMaster
 from uc3m_logistics.config.order_manager_config import JSON_FILES_PATH
 from uc3m_logistics.exception.order_management_exception import OrderManagementException
