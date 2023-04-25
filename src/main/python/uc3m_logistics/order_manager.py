@@ -32,8 +32,6 @@ class OrderManager:
         my_order.crear_json()
         return my_order.order_id
 
-
-    #pylint: disable=too-many-locals
     def send_product (self, input_file:str )->str:
         """Sends the order included in the input_file"""
         my_sign = OrderShipping(input_file)
