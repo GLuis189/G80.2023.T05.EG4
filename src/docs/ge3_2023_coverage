@@ -1,0 +1,30 @@
+Name                                                       Stmts   Miss Branch BrPart  Cover
+--------------------------------------------------------------------------------------------
+__init__.py                                                    0      0      0      0   100%
+uc3m_logistics\__init__.py                                     6      0      0      0   100%
+uc3m_logistics\config\__init__.py                              0      0      0      0   100%
+uc3m_logistics\config\order_manager_config.py                  3      0      0      0   100%
+uc3m_logistics\data\__init__.py                                0      0      0      0   100%
+uc3m_logistics\data\data_attr\__init__.py                      0      0      0      0   100%
+uc3m_logistics\data\data_attr\attribute.py                    19      1      2      0    95%
+uc3m_logistics\data\data_attr\attribute_address.py             7      0      0      0   100%
+uc3m_logistics\data\data_attr\attribute_email.py               7      0      0      0   100%
+uc3m_logistics\data\data_attr\attribute_order_id.py            7      0      0      0   100%
+uc3m_logistics\data\data_attr\attribute_order_type.py          7      0      0      0   100%
+uc3m_logistics\data\data_attr\attribute_phone_number.py        7      0      0      0   100%
+uc3m_logistics\data\data_attr\attribute_product_id.py         24      2      6      0    93%
+uc3m_logistics\data\data_attr\attribute_tracking_code.py       7      0      0      0   100%
+uc3m_logistics\data\data_attr\attribute_zip_code.py           13      0      2      0   100%
+uc3m_logistics\data\order_delivered.py                        32      2      4      0    94%
+uc3m_logistics\data\order_request.py                          57     10      0      0    82%
+uc3m_logistics\data\order_shipping.py                         98     11      8      2    88%
+uc3m_logistics\exception\__init__.py                           0      0      0      0   100%
+uc3m_logistics\exception\order_management_exception.py        10      1      0      0    90%
+uc3m_logistics\order_manager.py                               23      0      2      0   100%
+uc3m_logistics\store\__init__.py                               0      0      0      0   100%
+uc3m_logistics\store\json_store_delivered.py                  13      0      2      1    93%
+uc3m_logistics\store\json_store_master.py                     32      5      6      1    84%
+uc3m_logistics\store\json_store_order.py                      21      0      4      0   100%
+uc3m_logistics\store\json_store_shipments.py                  24      1      4      1    93%
+--------------------------------------------------------------------------------------------
+TOTAL                                                        417     33     40      5    92%
