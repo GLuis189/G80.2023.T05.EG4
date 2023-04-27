@@ -13,6 +13,19 @@ from uc3m_logistics.store.json_store_order import JsonOrderStore
 #pylint: disable=too-many-instance-attributes
 class OrderShipping():
     """Class representing the shipping of an order"""
+    __ERROR_ORDER_ID_NOT_FOUND = "order_id not found"
+    __ERROR_FILE_NOT_FOUND = "File is not found"
+    __ERROR_JSON = "JSON Decode Error - Wrong JSON Format"
+    __ORDER_ID_LABEL = "OrderID"
+    __EMAIL_LABEL = "ContactEmail"
+    __ERROR_BAD_LABEL = "Bad label"
+    __ERROR_MANIPULATED = "Orders' data_attr have been manipulated"
+    __PRODUCT_ID_LABEL = "_OrderRequest__product_id"
+    __DELIVERY_ADDRESS_LABEL = "_OrderRequest__delivery_address"
+    __ORDER_TYPE_LABEL = "_OrderRequest__order_type"
+    __PHONE_LABEL = "_OrderRequest__phone_number"
+    __TIME_STAMP_LABEL = "_OrderRequest__time_stamp"
+    __ZIP_LABEL = "_OrderRequest__zip_code"
 
     def __init__(self, input_file:str)->None:
         """Constructor de la clase OrderShipping"""
@@ -95,39 +108,39 @@ class OrderShipping():
                 data = json.load(file)
         except FileNotFoundError as exception:
             # file is not found
-            raise OrderManagementException("File is not found") from exception
+            raise OrderManagementException(self.__ERROR_FILE_NOT_FOUND) from exception
         except json.JSONDecodeError as exception:
-            raise OrderManagementException("JSON Decode Error - Wrong JSON Format") from exception
+            raise OrderManagementException(self.__ERROR_JSON) from exception
         return data
 
     def validate_labels(self, data:any)->(str, str):
         """Valida las keys de data"""
         try:
-            order_id = data["OrderID"]
-            email = data["ContactEmail"]
+            order_id = data[self.__ORDER_ID_LABEL]
+            email = data[self.__EMAIL_LABEL]
         except KeyError as exception:
-            raise OrderManagementException("Bad label") from exception
+            raise OrderManagementException(self.__ERROR_BAD_LABEL) from exception
         return email, order_id
 
     def check_order_id(self, data:any)->(str,str):
         """Comprueba el order id"""
         my_store = JsonOrderStore()
         my_store.load_store()
-        item = my_store.find_data(data["OrderID"])
+        item = my_store.find_data(data[self.__ORDER_ID_LABEL])
         if item:
             product_id, register_type = self.check_manipulated(data, item)
         else:
-            raise OrderManagementException("order_id not found")
+            raise OrderManagementException(self.__ERROR_ORDER_ID_NOT_FOUND)
         return product_id, register_type
 
     def check_manipulated(self, data:any, item:any)->(str,str):
         """Comprueba que no se haya manipualdo"""
-        product_id = item["_OrderRequest__product_id"]
-        address = item["_OrderRequest__delivery_address"]
-        register_type = item["_OrderRequest__order_type"]
-        phone = item["_OrderRequest__phone_number"]
-        order_timestamp = item["_OrderRequest__time_stamp"]
-        zip_code = item["_OrderRequest__zip_code"]
+        product_id = item[self.__PRODUCT_ID_LABEL]
+        address = item[self.__DELIVERY_ADDRESS_LABEL]
+        register_type = item[self.__ORDER_TYPE_LABEL]
+        phone = item[self.__PHONE_LABEL]
+        order_timestamp = item[self.__TIME_STAMP_LABEL]
+        zip_code = item[self.__ZIP_LABEL]
         # set the time when the order was registered for checking the md5
         with freeze_time(datetime.fromtimestamp(order_timestamp).date()):
             order = OrderRequest(product_id=product_id,
@@ -135,8 +148,8 @@ class OrderShipping():
                                  order_type=register_type,
                                  phone_number=phone,
                                  zip_code=zip_code)
-        if order.order_id != data["OrderID"]:
-            raise OrderManagementException("Orders' data_attr have been manipulated")
+        if order.order_id != data[self.__ORDER_ID_LABEL]:
+            raise OrderManagementException(self.__ERROR_MANIPULATED)
         return product_id, register_type
 
     def crear_json(self)->None:

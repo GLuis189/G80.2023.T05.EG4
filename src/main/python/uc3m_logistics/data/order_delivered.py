@@ -7,6 +7,9 @@ from uc3m_logistics.exception.order_management_exception import OrderManagementE
 
 class OrderDelivered():
     """Clase OrderDelivered"""
+    __FILD_LABEL = "_OrderShipping__delivery_day"
+    __ERROR_TRACKING_CODE_NOT_FOUND = "tracking_code is not found"
+    __ERROR_NOT_DELIVERY_DATE = "Today is not the delivery date"
     def __init__(self, tracking_code:str)->None:
         """Constructor OrderDelivered"""
         self.__tracking_code = TrackingCode(tracking_code).value
@@ -22,9 +25,9 @@ class OrderDelivered():
         my_ship_store.read_store()
         item_found = my_ship_store.find_data(tracking_code)
         if item_found:
-            del_timestamp = item_found["_OrderShipping__delivery_day"]
+            del_timestamp = item_found[self.__FILD_LABEL]
         else:
-            raise OrderManagementException("tracking_code is not found")
+            raise OrderManagementException(self.__ERROR_TRACKING_CODE_NOT_FOUND)
         return del_timestamp
 
     def check_date(self, del_timestamp:float)->date:
@@ -32,7 +35,7 @@ class OrderDelivered():
         today = datetime.today().date()
         delivery_date = datetime.fromtimestamp(del_timestamp).date()
         if delivery_date != today:
-            raise OrderManagementException("Today is not the delivery date")
+            raise OrderManagementException(self.__ERROR_NOT_DELIVERY_DATE)
         return today
 
     def crear_json(self)->None:

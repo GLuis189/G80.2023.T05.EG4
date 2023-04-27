@@ -4,11 +4,14 @@ from uc3m_logistics.exception.order_management_exception import OrderManagementE
 
 class ProductId(Attribute):
     """Clase hija,atributo ProductId"""
+    __ERROR = "Invalid EAN13 code string"
+    __ERROR_DIGIT = "Invalid EAN13 control digit"
+    __PATTERN = r"^[0-9]{13}$"
     def __init__(self, attr_value:str)->None:
         """Constructor"""
         super().__init__()
-        self._error_message = "Invalid EAN13 code string"
-        self._validation_pattern = r"^[0-9]{13}$"
+        self._error_message = self.__ERROR
+        self._validation_pattern = self.__PATTERN
         self._attr_value = self._validate(attr_value)
 
     def _validate(self, attr_value: str) -> str:
@@ -24,7 +27,7 @@ class ProductId(Attribute):
             try:
                 current_digit = int(digit)
             except ValueError as value_error:
-                raise OrderManagementException("Invalid EAN13 code string") from value_error
+                raise OrderManagementException(self.__ERROR) from value_error
             if i == 0:
                 code_read = current_digit
             else:
@@ -32,5 +35,5 @@ class ProductId(Attribute):
         control_digit = (10 - (checksum % 10)) % 10
 
         if (code_read == -1) or (code_read != control_digit):
-            raise OrderManagementException("Invalid EAN13 control digit")
+            raise OrderManagementException(self.__ERROR_DIGIT)
         return attr_value
